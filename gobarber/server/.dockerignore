@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+node_modules/
+build/
+temp/
+dist
+tmp/*
+ormconfig.json
+.env
+coverage/
+.git
+!tmp/.gitkeep
+yarn-error.log
+Dockerfile
+.dockerignore
