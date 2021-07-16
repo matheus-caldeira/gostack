@@ -4,24 +4,30 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/User';
-import IAppointment from '@modules/appointments/entities/IAppointment';
 
 @Entity('appointments')
-class Appointment implements IAppointment {
+class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   provider_id: string;
 
-  @ManyToMany(() => User)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'provider_id' })
   provider: User;
+
+  @Column()
+  user_id: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column('timestamp with time zone')
   date: Date;

@@ -11,9 +11,8 @@ export const Container = styled.div`
     font-size: 14px;
     font-weight: 500;
     opacity: 0;
-    visibility: hidden;
-
     transition: opacity 0.4s;
+    visibility: hidden;
 
     position: absolute;
     bottom: calc(100% + 12px);
@@ -35,7 +34,7 @@ export const Container = styled.div`
   }
 
   &:hover span {
-    opacity: 1;
     visibility: visible;
+    opacity: 1;
   }
 `;

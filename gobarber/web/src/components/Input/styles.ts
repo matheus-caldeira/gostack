@@ -33,8 +33,8 @@ export const Container = styled.div<ContainerProps>`
   ${props =>
     props.isFocused &&
     css`
-      border: 2px solid #ff9000;
       color: #ff9000;
+      border-color: #ff9000;
     `}
 
   ${props =>
@@ -45,9 +45,9 @@ export const Container = styled.div<ContainerProps>`
 
   input {
     flex: 1;
-    color: #f4ede8;
     background: transparent;
     border: 0;
+    color: #f4ede8;
 
     &::placeholder {
       color: #666360;
