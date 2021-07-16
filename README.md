@@ -6,7 +6,12 @@ Repositório de Aulas Bootcamp GoStack 11 - Rocketseat
 
 ## Sobre
 
+No GoStack vai a fundo nas tecnologias NodeJS, ReactJS e React Native, e todo o ecossistema dessas tecnologias, do zero ao deploy. Incluindo testes automatizados, integração contínua, publicação nas stores, e todas as biliotecas e frameworks importantes para quem deseja ficar pronto para os desafios do mundo real e se destacar no mercado de trabalho.  
+
+Ao final do treinamento é desenvolvido uma aplicação completo(mobile, web e backend) para garantir que dominou a stack e receber a sua certificação.  
+
 Esse repositório contém os códigos desenvolvidos por mim durante as aulas do curso GoStack 11 da Rocketseat, juntamente com o projeto final.  
+
 
 ## Certificado  
 
