@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
   Image,
   View,
@@ -14,14 +14,14 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 
-import { useAuth } from '../../hooks/auth';
+import api from '../../services/api';
+
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import getValidationErrors from '../../utils/getValidationErrors';
-
-import logo from '../../assets/logo.png';
+import logoImg from '../../assets/logo.png';
 
 import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
 
@@ -33,10 +33,10 @@ interface SignUpFormData {
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const navigation = useNavigation();
+
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
-  const { goBack } = useNavigation();
-  const { signUp } = useAuth();
 
   const handleSignUp = useCallback(
     async (data: SignUpFormData) => {
@@ -48,33 +48,39 @@ const SignUp: React.FC = () => {
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('Digite um e-mail válido'),
-          password: Yup.string().min(6, 'Mínimo 6 digitos'),
+          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await signUp(data);
+        await api.post('/users', data);
+
         Alert.alert(
-          'Cadastro realizado',
-          'Você já pode fazer seu logon no GoBarber!',
+          'Cadastro realizado com sucesso!',
+          'Você já pode fazer login na aplicação.',
         );
-        goBack();
+
+        navigation.goBack();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
           formRef.current?.setErrors(errors);
-        } else
-          Alert.alert(
-            'Erro na cadastro',
-            'Ocorreu um erro ao fazer cadastro, tente novamente.',
-          );
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro no cadastro',
+          'Ocorreu um erro ao fazer cadastro, tente novamente.',
+        );
       }
     },
-    [goBack, signUp],
+    [navigation],
   );
+
   return (
     <>
       <KeyboardAvoidingView
@@ -83,29 +89,26 @@ const SignUp: React.FC = () => {
         enabled
       >
         <ScrollView
-          contentContainerStyle={{ flex: 1 }}
           keyboardShouldPersistTaps="handled"
-          scrollEnabled
+          contentContainerStyle={{ flex: 1 }}
         >
           <Container>
-            <Image source={logo} />
+            <Image source={logoImg} />
 
             <View>
               <Title>Crie sua conta</Title>
             </View>
 
-            <Form
-              ref={formRef}
-              onSubmit={handleSignUp}
-              style={{ width: '100%' }}
-            >
+            <Form ref={formRef} onSubmit={handleSignUp}>
               <Input
                 autoCapitalize="words"
                 name="name"
                 icon="user"
                 placeholder="Nome"
                 returnKeyType="next"
-                onSubmitEditing={() => emailInputRef.current?.focus()}
+                onSubmitEditing={() => {
+                  emailInputRef.current?.focus();
+                }}
               />
 
               <Input
@@ -117,16 +120,18 @@ const SignUp: React.FC = () => {
                 icon="mail"
                 placeholder="E-mail"
                 returnKeyType="next"
-                onSubmitEditing={() => passwordInputRef.current?.focus()}
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
               />
 
               <Input
                 ref={passwordInputRef}
                 secureTextEntry
-                textContentType="newPassword"
                 name="password"
                 icon="lock"
                 placeholder="Senha"
+                textContentType="newPassword"
                 returnKeyType="send"
                 onSubmitEditing={() => formRef.current?.submitForm()}
               />
@@ -139,7 +144,7 @@ const SignUp: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <BackToSignIn onPress={() => goBack()}>
+      <BackToSignIn onPress={() => navigation.goBack()}>
         <Icon name="arrow-left" size={20} color="#fff" />
         <BackToSignInText>Voltar para logon</BackToSignInText>
       </BackToSignIn>
